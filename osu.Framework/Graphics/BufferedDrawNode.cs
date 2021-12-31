@@ -46,6 +46,7 @@ namespace osu.Framework.Graphics
             Child = child;
             SharedData = sharedData;
         }
+        private Vector2 largestBufferSize = Vector2.Zero;
 
         public override void ApplyState()
         {
@@ -58,9 +59,12 @@ namespace osu.Framework.Graphics
 
             clipDrawRectangle();
 
-            frameBufferSize = new Vector2(MathF.Ceiling(screenSpaceDrawRectangle.Width * frameBufferScale.X), MathF.Ceiling(screenSpaceDrawRectangle.Height * frameBufferScale.Y));
+            Vector2 desiredSize = new Vector2(MathF.Ceiling(screenSpaceDrawRectangle.Width * frameBufferScale.X), MathF.Ceiling(screenSpaceDrawRectangle.Height * frameBufferScale.Y));
+            largestBufferSize = Vector2.ComponentMax(largestBufferSize, desiredSize);
+
+            frameBufferSize = largestBufferSize;
             DrawRectangle = SharedData.PixelSnapping
-                ? new RectangleF(screenSpaceDrawRectangle.X, screenSpaceDrawRectangle.Y, frameBufferSize.X, frameBufferSize.Y)
+                ? new RectangleF(screenSpaceDrawRectangle.X, screenSpaceDrawRectangle.Y, desiredSize.X, desiredSize.Y)
                 : screenSpaceDrawRectangle;
 
             Child.ApplyState();

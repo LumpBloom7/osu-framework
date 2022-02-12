@@ -65,7 +65,8 @@ namespace osu.Framework.Graphics
 
             FrameBufferScreenSpaceDrawQuad = Quad.FromRectangle(((Drawable)Source).DrawRectangle) * FrameBufferDrawInfo.Matrix;
 
-            clipDrawRectangle();
+            // TODO: I needed to temporarily remove this as the modified DrawInfo that buffered content uses may exceed screenbounds, even if visually in-bounds
+            // clipDrawRectangle();
 
             Vector2 desiredSize = new Vector2(MathF.Ceiling(screenSpaceDrawRectangle.Width * frameBufferScale.X), MathF.Ceiling(screenSpaceDrawRectangle.Height * frameBufferScale.Y));
             largestBufferSize = Vector2.ComponentMax(largestBufferSize, desiredSize);

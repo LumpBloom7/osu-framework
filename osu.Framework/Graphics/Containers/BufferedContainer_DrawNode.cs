@@ -1,16 +1,16 @@
 ﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System;
 using System.Collections.Generic;
+using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.OpenGL;
 using osu.Framework.Graphics.OpenGL.Buffers;
-using osuTK;
-using osuTK.Graphics;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shaders;
-using System;
-using osu.Framework.Graphics.Colour;
 using osu.Framework.Utils;
+using osuTK;
+using osuTK.Graphics;
 using osuTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics.Containers
@@ -86,7 +86,7 @@ namespace osu.Framework.Graphics.Containers
                 ColourInfo finalEffectColour = DrawColourInfo.Colour;
                 finalEffectColour.ApplyChild(effectColour);
 
-                DrawFrameBuffer(SharedData.CurrentEffectBuffer, DrawRectangle, finalEffectColour);
+                DrawFrameBuffer(SharedData.CurrentEffectBuffer, FrameBufferScreenSpaceDrawQuad, finalEffectColour);
 
                 if (drawOriginal && effectPlacement == EffectPlacement.Behind)
                     base.DrawContents();

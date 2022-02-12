@@ -2,14 +2,14 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
-using osu.Framework.Graphics.Primitives;
-using osu.Framework.Graphics.Textures;
-using osuTK;
-using osu.Framework.Graphics.Shaders;
-using osu.Framework.Allocation;
 using System.Collections.Generic;
+using osu.Framework.Allocation;
 using osu.Framework.Caching;
 using osu.Framework.Extensions.EnumExtensions;
+using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Shaders;
+using osu.Framework.Graphics.Textures;
+using osuTK;
 using osuTK.Graphics;
 using osuTK.Graphics.ES30;
 
@@ -17,6 +17,10 @@ namespace osu.Framework.Graphics.Lines
 {
     public partial class Path : Drawable, IBufferedDrawable
     {
+
+        // Todo: This is here only to allow things to compile, I'll have to look into this later.
+        public DrawInfo FrameBufferDrawInfo => DrawInfo;
+
         public IShader RoundedTextureShader { get; private set; }
         public IShader TextureShader { get; private set; }
         private IShader pathShader;

@@ -48,6 +48,10 @@ namespace osu.Framework.Graphics
         }
         private Vector2 largestBufferSize = Vector2.Zero;
 
+        protected DrawInfo FrameBufferDrawInfo;
+
+        protected Quad FrameBufferScreenSpaceDrawQuad;
+
         public override void ApplyState()
         {
             base.ApplyState();
@@ -56,6 +60,9 @@ namespace osu.Framework.Graphics
             screenSpaceDrawRectangle = Source.ScreenSpaceDrawQuad.AABBFloat;
             DrawColourInfo = Source.FrameBufferDrawColour ?? new DrawColourInfo(Color4.White, base.DrawColourInfo.Blending);
             frameBufferScale = Source.FrameBufferScale;
+            FrameBufferDrawInfo = Source.FrameBufferDrawInfo;
+
+            FrameBufferScreenSpaceDrawQuad = Quad.FromRectangle(((Drawable)Source).DrawRectangle) * FrameBufferDrawInfo.Matrix;
 
             clipDrawRectangle();
 
@@ -135,7 +142,7 @@ namespace osu.Framework.Graphics
         /// </summary>
         protected virtual void DrawContents()
         {
-            DrawFrameBuffer(SharedData.MainBuffer, DrawRectangle, DrawColourInfo.Colour);
+            DrawFrameBuffer(SharedData.MainBuffer, FrameBufferScreenSpaceDrawQuad, DrawColourInfo.Colour);
         }
 
         /// <summary>

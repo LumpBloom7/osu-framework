@@ -376,6 +376,10 @@ namespace osu.Framework.Graphics.Containers
             FrameBufferDrawInfo = base.ComputeDrawInfo();
 
             var mat = Matrix3.CreateScale(FrameBufferDrawInfo.Matrix.ExtractScale());
+
+            // Cheeky bastard breaking rendering when masking is on.
+            mat.M33 = 1;
+
             var newDI = new DrawInfo(mat, mat.Inverted());
 
             return newDI;

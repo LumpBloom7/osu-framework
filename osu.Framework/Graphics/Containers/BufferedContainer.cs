@@ -355,7 +355,6 @@ namespace osu.Framework.Graphics.Containers
 
         public DrawColourInfo? FrameBufferDrawColour => base.DrawColourInfo;
 
-
         // Children should not receive the true colour to avoid colour doubling when the frame-buffers are rendered to the back-buffer.
         public override DrawColourInfo DrawColourInfo
         {
@@ -382,9 +381,9 @@ namespace osu.Framework.Graphics.Containers
             mat.M32 = FrameBufferDrawInfo.Matrix.M32;
             mat.M33 = 1;
 
-            var newDI = new DrawInfo(mat, mat.Inverted());
+            var newDi = new DrawInfo(mat, mat.Inverted());
 
-            return newDI;
+            return newDi;
         }
 
         protected override void Dispose(bool isDisposing)

@@ -17,10 +17,7 @@ namespace osu.Framework.Graphics.Lines
 {
     public partial class Path : Drawable, IBufferedDrawable
     {
-
-        // Todo: This is here only to allow things to compile, I'll have to look into this later.
         public DrawInfo FrameBufferDrawInfo => DrawInfo;
-
         public IShader RoundedTextureShader { get; private set; }
         public IShader TextureShader { get; private set; }
         private IShader pathShader;

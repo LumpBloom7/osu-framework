@@ -46,6 +46,7 @@ namespace osu.Framework.Graphics
             Child = child;
             SharedData = sharedData;
         }
+
         private Vector2 largestBufferSize = Vector2.Zero;
 
         protected DrawInfo FrameBufferDrawInfo;

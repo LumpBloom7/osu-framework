@@ -377,7 +377,9 @@ namespace osu.Framework.Graphics.Containers
 
             var mat = Matrix3.CreateScale(FrameBufferDrawInfo.Matrix.ExtractScale());
 
-            // Cheeky bastard breaking rendering when masking is on.
+            // Restore translations
+            mat.M31 = FrameBufferDrawInfo.Matrix.M31;
+            mat.M32 = FrameBufferDrawInfo.Matrix.M32;
             mat.M33 = 1;
 
             var newDI = new DrawInfo(mat, mat.Inverted());

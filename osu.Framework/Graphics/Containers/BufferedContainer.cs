@@ -368,15 +368,19 @@ namespace osu.Framework.Graphics.Containers
             }
         }
 
+        // We need to keep a good copy of this container's DrawSpace Quad for use in drawing
+        // Since buffered containers can be nested, only the highest buffered container in the hierachy will have a draw space that is identical to screen space
+        public DrawInfo FrameBufferDrawInfo { get; private set; }
+
         private protected override DrawInfo ComputeNodeDrawInfo()
         {
-            var di = base.ComputeNodeDrawInfo();
+            FrameBufferDrawInfo = base.ComputeNodeDrawInfo();
 
-            var mat = Matrix3.CreateScale(di.Matrix.ExtractScale());
+            var mat = Matrix3.CreateScale(FrameBufferDrawInfo.Matrix.ExtractScale());
 
             // Restore translations
-            mat.M31 = di.Matrix.M31;
-            mat.M32 = di.Matrix.M32;
+            mat.M31 = FrameBufferDrawInfo.Matrix.M31;
+            mat.M32 = FrameBufferDrawInfo.Matrix.M32;
             mat.M33 = 1;
 
             var newDi = new DrawInfo(mat, mat.Inverted());

@@ -17,6 +17,7 @@ namespace osu.Framework.Graphics.Lines
 {
     public partial class Path : Drawable, IBufferedDrawable
     {
+        public DrawInfo FrameBufferDrawInfo => NodeDrawInfo;
         public IShader RoundedTextureShader { get; private set; }
         public IShader TextureShader { get; private set; }
         private IShader pathShader;

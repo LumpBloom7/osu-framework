@@ -62,7 +62,7 @@ namespace osu.Framework.Graphics
             DrawColourInfo = Source.FrameBufferDrawColour ?? new DrawColourInfo(Color4.White, base.DrawColourInfo.Blending);
             frameBufferScale = Source.FrameBufferScale;
 
-            FrameBufferScreenSpaceDrawQuad = Source.ScreenSpaceDrawQuad;
+            FrameBufferScreenSpaceDrawQuad = Quad.FromRectangle(((Drawable)Source).DrawRectangle) * Source.FrameBufferDrawInfo.Matrix;
 
             // TODO: I needed to temporarily remove this as the modified DrawInfo that buffered content uses may exceed screenbounds, even if visually in-bounds
             // clipDrawRectangle();

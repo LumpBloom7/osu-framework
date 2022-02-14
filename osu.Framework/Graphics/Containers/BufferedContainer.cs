@@ -378,9 +378,11 @@ namespace osu.Framework.Graphics.Containers
 
             var mat = Matrix3.CreateScale(FrameBufferDrawInfo.Matrix.ExtractScale());
 
-            // Restore translations
-            mat.M31 = FrameBufferDrawInfo.Matrix.M31;
-            mat.M32 = FrameBufferDrawInfo.Matrix.M32;
+            // Restore translations so that BufferedContainerView works properly for now
+            //mat.M31 = FrameBufferDrawInfo.Matrix.M31;
+            //mat.M32 = FrameBufferDrawInfo.Matrix.M32;
+
+            // This cheeky bastard needs to be set to one, or masking will break
             mat.M33 = 1;
 
             var newDi = new DrawInfo(mat, mat.Inverted());

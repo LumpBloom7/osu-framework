@@ -9,6 +9,7 @@ using osu.Framework.Graphics.OpenGL;
 using osu.Framework.Graphics.OpenGL.Vertices;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shaders;
+using osuTK;
 
 namespace osu.Framework.Graphics.Sprites
 {
@@ -123,8 +124,22 @@ namespace osu.Framework.Graphics.Sprites
             public override void ApplyState()
             {
                 base.ApplyState();
+                if (Source.synchronisedDrawQuad)
+                {
+                    // We are drawing in DrawSpace, which may not match up with screen space
+                    // We can't directly use the screen space offset because of that
+                    var offset = Source.container.ToLocalSpace(Source.container.ScreenSpaceDrawQuad.AABBFloat.TopLeft - Source.ScreenSpaceDrawQuad.AABBFloat.TopLeft);
+                    var viewRect = new RectangleF(offset, Source.container.DrawSize);
+                    var frameBufferDrawQuad = Quad.FromRectangle(viewRect) * Source.container.FrameBufferDrawInfo.Matrix;
 
-                screenSpaceDrawQuad = Source.synchronisedDrawQuad ? Source.container.ScreenSpaceDrawQuad : Source.ScreenSpaceDrawQuad;
+                    screenSpaceDrawQuad = Source.synchronisedDrawQuad ? frameBufferDrawQuad : Source.DrawSpaceDrawQuad;
+                }
+                else
+                {
+                    screenSpaceDrawQuad = Source.DrawSpaceDrawQuad;
+                }
+
+
                 shared = Source.sharedData;
 
                 displayOriginalEffects = Source.displayOriginalEffects;

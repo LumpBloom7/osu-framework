@@ -17,7 +17,6 @@ namespace osu.Framework.Graphics.Lines
 {
     public partial class Path : Drawable, IBufferedDrawable
     {
-        public DrawInfo FrameBufferDrawInfo => NodeDrawInfo;
         public IShader RoundedTextureShader { get; private set; }
         public IShader TextureShader { get; private set; }
         private IShader pathShader;
@@ -279,6 +278,26 @@ namespace osu.Framework.Graphics.Lines
         public override DrawColourInfo DrawColourInfo => new DrawColourInfo(Color4.White, base.DrawColourInfo.Blending);
 
         public Color4 BackgroundColour => new Color4(0, 0, 0, 0);
+
+        public DrawInfo FrameBufferDrawInfo { get; set; }
+
+        private protected override DrawInfo ComputeNodeDrawInfo()
+        {
+            FrameBufferDrawInfo = base.ComputeNodeDrawInfo();
+
+            var mat = Matrix3.CreateScale(FrameBufferDrawInfo.Matrix.ExtractScale());
+
+            // Restore translations so that BufferedContainerView works properly for now
+            //mat.M31 = FrameBufferDrawInfo.Matrix.M31;
+            //mat.M32 = FrameBufferDrawInfo.Matrix.M32;
+
+            // This cheeky bastard needs to be set to one, or masking will break
+            mat.M33 = 1;
+
+            var newDi = new DrawInfo(mat, mat.Inverted());
+
+            return newDi;
+        }
 
         private readonly BufferedDrawNodeSharedData sharedData = new BufferedDrawNodeSharedData(new[] { RenderbufferInternalFormat.DepthComponent16 }, clipToRootNode: true);
 

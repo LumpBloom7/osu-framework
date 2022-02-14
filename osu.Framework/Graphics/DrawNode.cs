@@ -70,7 +70,7 @@ namespace osu.Framework.Graphics
         /// </summary>
         public virtual void ApplyState()
         {
-            DrawInfo = Source.DrawInfo;
+            DrawInfo = Source.NodeDrawInfo;
             DrawColourInfo = Source.DrawColourInfo;
             InvalidationID = Source.InvalidationID;
         }

@@ -35,7 +35,7 @@ namespace osu.Framework.Graphics
         protected RectangleF DrawRectangle { get; private set; }
 
         private Color4 backgroundColour;
-        private RectangleF screenSpaceDrawRectangle;
+        private RectangleF drawSpaceDrawRect;
         private Vector2 frameBufferScale;
         private Vector2 frameBufferSize;
         private IDrawable rootNodeCached;
@@ -58,23 +58,22 @@ namespace osu.Framework.Graphics
             base.ApplyState();
 
             backgroundColour = Source.BackgroundColour;
-            screenSpaceDrawRectangle = Source.ScreenSpaceDrawQuad.AABBFloat;
+            drawSpaceDrawRect = ((Drawable)Source).DrawSpaceDrawQuad.AABBFloat;
             DrawColourInfo = Source.FrameBufferDrawColour ?? new DrawColourInfo(Color4.White, base.DrawColourInfo.Blending);
             frameBufferScale = Source.FrameBufferScale;
-            FrameBufferDrawInfo = Source.FrameBufferDrawInfo;
 
-            FrameBufferScreenSpaceDrawQuad = Quad.FromRectangle(((Drawable)Source).DrawRectangle) * FrameBufferDrawInfo.Matrix;
+            FrameBufferScreenSpaceDrawQuad = Source.ScreenSpaceDrawQuad;
 
             // TODO: I needed to temporarily remove this as the modified DrawInfo that buffered content uses may exceed screenbounds, even if visually in-bounds
             // clipDrawRectangle();
 
-            Vector2 desiredSize = new Vector2(MathF.Ceiling(screenSpaceDrawRectangle.Width * frameBufferScale.X), MathF.Ceiling(screenSpaceDrawRectangle.Height * frameBufferScale.Y));
+            Vector2 desiredSize = new Vector2(MathF.Ceiling(drawSpaceDrawRect.Width * frameBufferScale.X), MathF.Ceiling(drawSpaceDrawRect.Height * frameBufferScale.Y));
             largestBufferSize = Vector2.ComponentMax(largestBufferSize, desiredSize);
 
             frameBufferSize = largestBufferSize;
             DrawRectangle = SharedData.PixelSnapping
-                ? new RectangleF(screenSpaceDrawRectangle.X, screenSpaceDrawRectangle.Y, desiredSize.X, desiredSize.Y)
-                : screenSpaceDrawRectangle;
+                ? new RectangleF(0, 0, desiredSize.X, desiredSize.Y)
+                : drawSpaceDrawRect;
 
             Child.ApplyState();
         }
@@ -109,7 +108,7 @@ namespace osu.Framework.Graphics
                     {
                         // We need to draw children as if they were zero-based to the top-left of the texture.
                         // We can do this by adding a translation component to our (orthogonal) projection matrix.
-                        GLWrapper.PushOrtho(screenSpaceDrawRectangle);
+                        GLWrapper.PushOrtho(drawSpaceDrawRect);
                         GLWrapper.Clear(new ClearInfo(backgroundColour));
 
                         Child.Draw(vertexAction);
@@ -167,12 +166,12 @@ namespace osu.Framework.Graphics
             // Disable masking for generating the frame buffer since masking will be re-applied
             // when actually drawing later on anyways. This allows more information to be captured
             // in the frame buffer and helps with cached buffers being re-used.
-            RectangleI screenSpaceMaskingRect = new RectangleI((int)Math.Floor(screenSpaceDrawRectangle.X), (int)Math.Floor(screenSpaceDrawRectangle.Y), (int)frameBufferSize.X + 1, (int)frameBufferSize.Y + 1);
+            RectangleI screenSpaceMaskingRect = new RectangleI((int)Math.Floor(drawSpaceDrawRect.X), (int)Math.Floor(drawSpaceDrawRect.Y), (int)frameBufferSize.X + 1, (int)frameBufferSize.Y + 1);
 
             GLWrapper.PushMaskingInfo(new MaskingInfo
             {
                 ScreenSpaceAABB = screenSpaceMaskingRect,
-                MaskingRect = screenSpaceDrawRectangle,
+                MaskingRect = drawSpaceDrawRect,
                 ToMaskingSpace = Matrix3.Identity,
                 BlendRange = 1,
                 AlphaExponent = 1,
@@ -215,7 +214,7 @@ namespace osu.Framework.Graphics
 
             // Clip the screen space draw rectangle to the bounds of the root node
             RectangleF clipBounds = new RectangleF(rootNode.ScreenSpaceDrawQuad.TopLeft, rootNode.ScreenSpaceDrawQuad.Size);
-            screenSpaceDrawRectangle.Intersect(clipBounds);
+            drawSpaceDrawRect.Intersect(clipBounds);
         }
 
         protected override void Dispose(bool isDisposing)

@@ -62,7 +62,9 @@ namespace osu.Framework.Graphics
             total_count.Value++;
 
             AddLayout(drawInfoBacking);
+            AddLayout(nodeDrawInfoBacking);
             AddLayout(drawSizeBacking);
+            AddLayout(drawSpaceDrawQuadBacking);
             AddLayout(screenSpaceDrawQuadBacking);
             AddLayout(drawColourInfoBacking);
             AddLayout(requiredParentSizeToFitBacking);
@@ -1575,15 +1577,19 @@ namespace osu.Framework.Graphics
         internal bool IsMaskedAway { get; private set; }
 
         private readonly LayoutValue<Quad> screenSpaceDrawQuadBacking = new LayoutValue<Quad>(Invalidation.DrawInfo | Invalidation.RequiredParentSizeToFit | Invalidation.Presence);
+        private readonly LayoutValue<Quad> drawSpaceDrawQuadBacking = new LayoutValue<Quad>(Invalidation.DrawInfo | Invalidation.RequiredParentSizeToFit | Invalidation.Presence);
 
         protected virtual Quad ComputeScreenSpaceDrawQuad() => ToScreenSpace(DrawRectangle);
+        protected virtual Quad ComputeDrawSpaceDrawQuad() => ToDrawSpace(DrawRectangle);
 
         /// <summary>
         /// The screen-space quad this drawable occupies.
         /// </summary>
         public virtual Quad ScreenSpaceDrawQuad => screenSpaceDrawQuadBacking.IsValid ? screenSpaceDrawQuadBacking : screenSpaceDrawQuadBacking.Value = ComputeScreenSpaceDrawQuad();
+        public virtual Quad DrawSpaceDrawQuad => drawSpaceDrawQuadBacking.IsValid ? drawSpaceDrawQuadBacking : drawSpaceDrawQuadBacking.Value = ComputeDrawSpaceDrawQuad();
 
         private readonly LayoutValue<DrawInfo> drawInfoBacking = new LayoutValue<DrawInfo>(Invalidation.DrawInfo | Invalidation.RequiredParentSizeToFit | Invalidation.Presence);
+        private readonly LayoutValue<DrawInfo> nodeDrawInfoBacking = new LayoutValue<DrawInfo>(Invalidation.DrawInfo | Invalidation.RequiredParentSizeToFit | Invalidation.Presence);
 
         private protected virtual DrawInfo ComputeDrawInfo()
         {
@@ -1600,10 +1606,26 @@ namespace osu.Framework.Graphics
             return di;
         }
 
+        private protected virtual DrawInfo ComputeNodeDrawInfo()
+        {
+            DrawInfo di = Parent?.NodeDrawInfo ?? new DrawInfo(null);
+
+            Vector2 pos = DrawPosition + AnchorPosition;
+            Vector2 drawScale = DrawScale;
+
+            if (Parent != null)
+                pos += Parent.ChildOffset;
+
+            di.ApplyTransform(pos, drawScale, Rotation, Shear, OriginPosition);
+
+            return di;
+        }
+
         /// <summary>
         /// Contains the linear transformation of this <see cref="Drawable"/> that is used during draw.
         /// </summary>
         public virtual DrawInfo DrawInfo => drawInfoBacking.IsValid ? drawInfoBacking : drawInfoBacking.Value = ComputeDrawInfo();
+        public virtual DrawInfo NodeDrawInfo => nodeDrawInfoBacking.IsValid ? nodeDrawInfoBacking : nodeDrawInfoBacking.Value = ComputeNodeDrawInfo();
 
         private readonly LayoutValue<DrawColourInfo> drawColourInfoBacking = new LayoutValue<DrawColourInfo>(
             Invalidation.Colour | Invalidation.DrawInfo | Invalidation.RequiredParentSizeToFit | Invalidation.Presence,
@@ -1966,6 +1988,9 @@ namespace osu.Framework.Graphics
         /// <param name="screenSpaceQuad">A quad in screen coordinates.</param>
         /// <returns>The quad in local coordinates.</returns>
         public Quad ToLocalSpace(Quad screenSpaceQuad) => screenSpaceQuad * DrawInfo.MatrixInverse;
+
+        public Vector2 ToDrawSpace(Vector2 input) => Vector2Extensions.Transform(input, NodeDrawInfo.Matrix);
+        public Quad ToDrawSpace(RectangleF input) => Quad.FromRectangle(input) * NodeDrawInfo.Matrix;
 
         #endregion
 

@@ -35,10 +35,5 @@ namespace osu.Framework.Graphics
         /// The contents of the <see cref="FrameBuffer"/>s are populated at this scale, however the scale of <see cref="Drawable"/>s remains unaffected.
         /// </remarks>
         Vector2 FrameBufferScale { get; }
-
-        /// <summary>
-        /// The draw info with with the <see cref="FrameBuffer"/>s are rendered to the screen.
-        /// </summary>
-        DrawInfo FrameBufferDrawInfo { get; }
     }
 }

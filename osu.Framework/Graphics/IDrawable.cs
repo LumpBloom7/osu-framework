@@ -1,11 +1,11 @@
 ﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-using osuTK;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Transforms;
 using osu.Framework.Timing;
+using osuTK;
 
 namespace osu.Framework.Graphics
 {
@@ -29,6 +29,13 @@ namespace osu.Framework.Graphics
         /// </summary>
         DrawInfo DrawInfo { get; }
 
+
+        /// <summary>
+        /// Contains a linear transformation, colour information, and blending information
+        /// of this drawable for use during the draw process.
+        /// </summary>
+        DrawInfo NodeDrawInfo { get; }
+
         /// <summary>
         /// Contains the colour and blending information of this <see cref="Drawable"/> that are used during draw.
         /// </summary>
@@ -38,6 +45,11 @@ namespace osu.Framework.Graphics
         /// The screen-space quad this drawable occupies.
         /// </summary>
         Quad ScreenSpaceDrawQuad { get; }
+
+        /// <summary>
+        /// The draw-space quad this drawable occupies.
+        /// </summary>
+        Quad DrawSpaceDrawQuad { get; }
 
         /// <summary>
         /// The parent of this drawable in the scene graph.

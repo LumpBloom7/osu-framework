@@ -313,7 +313,7 @@ namespace osu.Framework.Graphics.Containers
                 ForceRedraw();
             else if (!screenSpaceSizeBacking.IsValid)
             {
-                Vector2 drawSize = ScreenSpaceDrawQuad.AABBFloat.Size;
+                Vector2 drawSize = DrawSpaceDrawQuad.AABBFloat.Size;
 
                 if (!RedrawOnScale)
                 {
@@ -368,17 +368,15 @@ namespace osu.Framework.Graphics.Containers
             }
         }
 
-        public DrawInfo FrameBufferDrawInfo { get; private set; }
-
-        private protected override DrawInfo ComputeDrawInfo()
+        private protected override DrawInfo ComputeNodeDrawInfo()
         {
-            FrameBufferDrawInfo = base.ComputeDrawInfo();
+            var di = base.ComputeNodeDrawInfo();
 
-            var mat = Matrix3.CreateScale(FrameBufferDrawInfo.Matrix.ExtractScale());
+            var mat = Matrix3.CreateScale(di.Matrix.ExtractScale());
 
             // Restore translations
-            mat.M31 = FrameBufferDrawInfo.Matrix.M31;
-            mat.M32 = FrameBufferDrawInfo.Matrix.M32;
+            mat.M31 = di.Matrix.M31;
+            mat.M32 = di.Matrix.M32;
             mat.M33 = 1;
 
             var newDi = new DrawInfo(mat, mat.Inverted());

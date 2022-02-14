@@ -13,8 +13,8 @@ using osu.Framework.Graphics.UserInterface;
 using osu.Framework.IO.Stores;
 using osu.Framework.Layout;
 using osu.Framework.Localisation;
-using osu.Framework.Utils;
 using osu.Framework.Text;
+using osu.Framework.Utils;
 using osuTK;
 using osuTK.Graphics;
 
@@ -526,7 +526,7 @@ namespace osu.Framework.Graphics.Sprites
             {
                 screenSpaceCharactersBacking.Add(new ScreenSpaceCharacterPart
                 {
-                    DrawQuad = ToScreenSpace(character.DrawRectangle.Inflate(inflationAmount)),
+                    DrawQuad = ToDrawSpace(character.DrawRectangle.Inflate(inflationAmount)),
                     InflationPercentage = Vector2.Divide(inflationAmount, character.DrawRectangle.Size),
                     Texture = character.Texture
                 });

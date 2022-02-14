@@ -2,13 +2,13 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
-using osu.Framework.Graphics.Primitives;
-using osu.Framework.Graphics.Textures;
-using osuTK;
-using osu.Framework.Graphics.Shaders;
 using osu.Framework.Allocation;
-using osu.Framework.Layout;
 using osu.Framework.Graphics.OpenGL.Textures;
+using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Shaders;
+using osu.Framework.Graphics.Textures;
+using osu.Framework.Layout;
+using osuTK;
 
 namespace osu.Framework.Graphics.Sprites
 {
@@ -201,6 +201,13 @@ namespace osu.Framework.Graphics.Sprites
 
             return ToScreenSpace(DrawRectangle.Inflate(InflationAmount));
         }
+        protected override Quad ComputeDrawSpaceDrawQuad()
+        {
+            if (EdgeSmoothness == Vector2.Zero)
+                return base.ComputeDrawSpaceDrawQuad();
+
+            return ToDrawSpace(DrawRectangle.Inflate(InflationAmount));
+        }
 
         // Matches the invalidation types of Drawable.screenSpaceDrawQuadBacking
         private readonly LayoutValue<Quad> conservativeScreenSpaceDrawQuadBacking = new LayoutValue<Quad>(Invalidation.DrawInfo | Invalidation.RequiredParentSizeToFit | Invalidation.Presence);
@@ -214,9 +221,9 @@ namespace osu.Framework.Graphics.Sprites
             if (Texture == null || Texture is TextureWhitePixel)
             {
                 if (EdgeSmoothness == Vector2.Zero)
-                    return ScreenSpaceDrawQuad;
+                    return DrawSpaceDrawQuad;
 
-                return ToScreenSpace(DrawRectangle);
+                return ToDrawSpace(DrawRectangle);
             }
 
             // ======================================================================================================================
@@ -252,7 +259,7 @@ namespace osu.Framework.Graphics.Sprites
 
             Vector2 shrinkageAmount = Vector2.ComponentMin(scale.Xy, rectangle.Size / 2);
 
-            return ToScreenSpace(rectangle.Inflate(-shrinkageAmount));
+            return ToDrawSpace(rectangle.Inflate(-shrinkageAmount));
         }
 
         public override string ToString()

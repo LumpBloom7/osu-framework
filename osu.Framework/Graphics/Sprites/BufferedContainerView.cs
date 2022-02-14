@@ -9,7 +9,6 @@ using osu.Framework.Graphics.OpenGL;
 using osu.Framework.Graphics.OpenGL.Vertices;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shaders;
-using osuTK;
 
 namespace osu.Framework.Graphics.Sprites
 {
@@ -124,6 +123,7 @@ namespace osu.Framework.Graphics.Sprites
             public override void ApplyState()
             {
                 base.ApplyState();
+
                 if (Source.synchronisedDrawQuad)
                 {
                     // We are drawing in DrawSpace, which may not match up with screen space
@@ -138,7 +138,6 @@ namespace osu.Framework.Graphics.Sprites
                 {
                     screenSpaceDrawQuad = Source.DrawSpaceDrawQuad;
                 }
-
 
                 shared = Source.sharedData;
 

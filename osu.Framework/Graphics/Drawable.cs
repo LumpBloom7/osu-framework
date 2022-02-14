@@ -1580,12 +1580,14 @@ namespace osu.Framework.Graphics
         private readonly LayoutValue<Quad> drawSpaceDrawQuadBacking = new LayoutValue<Quad>(Invalidation.DrawInfo | Invalidation.RequiredParentSizeToFit | Invalidation.Presence);
 
         protected virtual Quad ComputeScreenSpaceDrawQuad() => ToScreenSpace(DrawRectangle);
+
         protected virtual Quad ComputeDrawSpaceDrawQuad() => ToDrawSpace(DrawRectangle);
 
         /// <summary>
         /// The screen-space quad this drawable occupies.
         /// </summary>
         public virtual Quad ScreenSpaceDrawQuad => screenSpaceDrawQuadBacking.IsValid ? screenSpaceDrawQuadBacking : screenSpaceDrawQuadBacking.Value = ComputeScreenSpaceDrawQuad();
+
         public virtual Quad DrawSpaceDrawQuad => drawSpaceDrawQuadBacking.IsValid ? drawSpaceDrawQuadBacking : drawSpaceDrawQuadBacking.Value = ComputeDrawSpaceDrawQuad();
 
         private readonly LayoutValue<DrawInfo> drawInfoBacking = new LayoutValue<DrawInfo>(Invalidation.DrawInfo | Invalidation.RequiredParentSizeToFit | Invalidation.Presence);
@@ -1625,6 +1627,7 @@ namespace osu.Framework.Graphics
         /// Contains the linear transformation of this <see cref="Drawable"/> that is used during draw.
         /// </summary>
         public virtual DrawInfo DrawInfo => drawInfoBacking.IsValid ? drawInfoBacking : drawInfoBacking.Value = ComputeDrawInfo();
+
         public virtual DrawInfo NodeDrawInfo => nodeDrawInfoBacking.IsValid ? nodeDrawInfoBacking : nodeDrawInfoBacking.Value = ComputeNodeDrawInfo();
 
         private readonly LayoutValue<DrawColourInfo> drawColourInfoBacking = new LayoutValue<DrawColourInfo>(

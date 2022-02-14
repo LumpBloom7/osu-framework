@@ -29,7 +29,6 @@ namespace osu.Framework.Graphics
         /// </summary>
         DrawInfo DrawInfo { get; }
 
-
         /// <summary>
         /// Contains a linear transformation, colour information, and blending information
         /// of this drawable for use during the draw process.

@@ -201,6 +201,7 @@ namespace osu.Framework.Graphics.Sprites
 
             return ToScreenSpace(DrawRectangle.Inflate(InflationAmount));
         }
+
         protected override Quad ComputeDrawSpaceDrawQuad()
         {
             if (EdgeSmoothness == Vector2.Zero)

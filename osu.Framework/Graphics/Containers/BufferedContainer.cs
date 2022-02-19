@@ -316,10 +316,7 @@ namespace osu.Framework.Graphics.Containers
                 Vector2 drawSize = DrawSpaceDrawQuad.AABBFloat.Size;
 
                 if (!RedrawOnScale)
-                {
-                    Matrix3 scaleMatrix = Matrix3.CreateScale(DrawInfo.MatrixInverse.ExtractScale());
-                    Vector2Extensions.Transform(ref drawSize, ref scaleMatrix, out drawSize);
-                }
+                    drawSize = DrawSize;
 
                 if (!Precision.AlmostEquals(lastScreenSpaceSize, drawSize))
                 {

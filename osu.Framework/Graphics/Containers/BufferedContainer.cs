@@ -313,7 +313,8 @@ namespace osu.Framework.Graphics.Containers
                 ForceRedraw();
             else if (!screenSpaceSizeBacking.IsValid)
             {
-                Vector2 drawSize = DrawSpaceDrawQuad.AABBFloat.Size;
+                // AABB is used instead of AABBF to reduce redraws for imperceivably small dimension changes
+                Vector2 drawSize = DrawSpaceDrawQuad.AABB.Size;
 
                 if (!RedrawOnScale)
                     drawSize = DrawSize;

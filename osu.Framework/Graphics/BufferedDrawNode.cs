@@ -67,10 +67,12 @@ namespace osu.Framework.Graphics
             // TODO: I needed to temporarily remove this as the modified DrawInfo that buffered content uses may exceed screenbounds, even if visually in-bounds
             // clipDrawRectangle();
 
+            // We could reuse the same buffer size as long as it can contain our desired draw size
+            // This is to avoid excessive TextureUploads, which come with significant GC time when the size constantly changes
             Vector2 desiredSize = new Vector2(MathF.Ceiling(drawSpaceDrawRect.Width * frameBufferScale.X), MathF.Ceiling(drawSpaceDrawRect.Height * frameBufferScale.Y));
             largestBufferSize = Vector2.ComponentMax(largestBufferSize, desiredSize);
-
             frameBufferSize = largestBufferSize;
+
             DrawRectangle = SharedData.PixelSnapping
                 ? new RectangleF(0, 0, desiredSize.X, desiredSize.Y)
                 : drawSpaceDrawRect;

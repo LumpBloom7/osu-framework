@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System.Collections.Generic;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
@@ -25,6 +26,10 @@ namespace osu.Framework.Tests.Visual.Containers
                 "cached with rotation",
                 "uncached with movement",
                 "cached with movement",
+                "uncached with shearing",
+                "cached with shearing",
+                "uncached with shearing and rotation",
+                "cached with shearing and rotation",
                 "uncached with parent scale",
                 "cached with parent scale",
                 "uncached with parent scale&fade",
@@ -48,11 +53,11 @@ namespace osu.Framework.Tests.Visual.Containers
                         Text = labels[i],
                         Font = new FontUsage(size: 20),
                     },
-                    box = new ContainingBox(i >= 6, i >= 8)
+                    box = new ContainingBox(i >= 10, i >= 12)
                     {
-                        Child = new CountingBox(i == 2 || i == 3, i == 4 || i == 5, cached: i % 2 == 1 || i == 10)
+                        Child = new CountingBox(i == 2 || i == 3 || i == 8 || i == 9 , i == 4 || i == 5, i >= 6 && i <= 9, cached: i % 2 == 1 || i == 14)
                         {
-                            RedrawOnScale = i != 10
+                            RedrawOnScale = i != 14
                         },
                     }
                 });
@@ -83,9 +88,9 @@ namespace osu.Framework.Tests.Visual.Containers
             AddAssert("box 5 count is less than box 6 count", () => boxes[5].Count < boxes[6].Count);
 
             // ensure we don't break on colour invalidations (due to blanket invalidation logic in Drawable.Invalidate).
-            AddAssert("box 7 count equals box 8 count", () => boxes[7].Count == boxes[8].Count);
+            AddAssert("box 11 count equals box 12 count", () => boxes[11].Count == boxes[12].Count);
 
-            AddAssert("box 10 count is 1", () => boxes[10].Count == 1);
+            AddAssert("box 14 count is 1", () => boxes[14].Count == 1);
         }
 
         private class ContainingBox : Container<CountingBox>
@@ -117,13 +122,15 @@ namespace osu.Framework.Tests.Visual.Containers
 
             private readonly bool rotating;
             private readonly bool moving;
+            private readonly bool shearing;
             private readonly SpriteText count;
 
-            public CountingBox(bool rotating = false, bool moving = false, bool cached = false)
+            public CountingBox(bool rotating = false, bool moving = false, bool shearing = false, bool cached = false)
                 : base(cachedFrameBuffer: cached)
             {
                 this.rotating = rotating;
                 this.moving = moving;
+                this.shearing = shearing;
                 RelativeSizeAxes = Axes.Both;
                 Origin = Anchor.Centre;
                 Anchor = Anchor.Centre;
@@ -163,8 +170,9 @@ namespace osu.Framework.Tests.Visual.Containers
             protected override void LoadComplete()
             {
                 base.LoadComplete();
-                if (rotating) this.RotateTo(360, 1000).Loop();
+                if (rotating) this.Spin(1000, RotationDirection.Clockwise).Loop();
                 if (moving) this.MoveTo(new Vector2(100, 0), 2000, Easing.InOutSine).Then().MoveTo(new Vector2(0, 0), 2000, Easing.InOutSine).Loop();
+                if (shearing) this.TransformTo(nameof(Shear), new Vector2(1, 0), 2000, Easing.InOutSine).Then().TransformTo(nameof(Shear), Vector2.Zero, 2000, Easing.InOutSine).Loop();
             }
         }
     }

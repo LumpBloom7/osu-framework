@@ -132,7 +132,7 @@ namespace osu.Framework.Graphics.Sprites
                     var viewRect = new RectangleF(offset, Source.container.DrawSize);
                     var frameBufferDrawQuad = Quad.FromRectangle(viewRect) * Source.container.FrameBufferDrawInfo.Matrix;
 
-                    screenSpaceDrawQuad = Source.synchronisedDrawQuad ? frameBufferDrawQuad : Source.DrawSpaceDrawQuad;
+                    screenSpaceDrawQuad = frameBufferDrawQuad;
                 }
                 else
                 {

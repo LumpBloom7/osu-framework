@@ -12,7 +12,7 @@ namespace osu.Framework.Graphics.Rendering
     {
         bool IEquatable<IUniformBuffer>.Equals(IUniformBuffer? other) => false;
 
-        bool BoundToEquivalentBuffer { get; set; }
+        bool BoundViaEquivalentBuffer { get; set; }
         string BoundBlockName { get; set; }
     }
 

@@ -43,12 +43,12 @@ namespace osu.Framework.Graphics.Rendering.Deferred
 
                 FrameStatistics.Increment(StatisticsCounterType.UniformUpl);
 
-                if (BoundToEquivalentBuffer)
+                if (BoundViaEquivalentBuffer)
                     renderer.BindUniformBuffer(BoundBlockName, this);
             }
         }
 
-        public bool BoundToEquivalentBuffer { get; set; }
+        public bool BoundViaEquivalentBuffer { get; set; }
         public string BoundBlockName { get; set; } = string.Empty;
 
         public UniformBufferReference Write(in MemoryReference memory)

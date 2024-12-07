@@ -18,7 +18,7 @@ namespace osu.Framework.Graphics.Rendering.Dummy
 
         public int Size { get; }
 
-        public bool BoundToEquivalentBuffer { get; set; }
+        public bool BoundViaEquivalentBuffer { get; set; }
         public string BoundBlockName { get; set; }= string.Empty;
 
         public T this[int index]

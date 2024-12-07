@@ -227,7 +227,7 @@ namespace osu.Framework.Graphics.Rendering
             Shader = null;
 
             foreach (var b in boundUniformBuffers)
-                b.Value.BoundToEquivalentBuffer = false;
+                b.Value.BoundViaEquivalentBuffer = false;
 
             boundUniformBuffers.Clear();
             viewportStack.Clear();
@@ -1092,11 +1092,11 @@ namespace osu.Framework.Graphics.Rendering
 
             if (boundUniformBuffers.TryGetValue(blockName, out IUniformBuffer? current) && current.Equals(buffer))
             {
-                buffer.BoundToEquivalentBuffer = true;
+                buffer.BoundViaEquivalentBuffer = current != buffer;
                 return;
             }
 
-            buffer.BoundToEquivalentBuffer = false;
+            buffer.BoundViaEquivalentBuffer = false;
 
             FlushCurrentBatch(FlushBatchSource.BindBuffer);
             SetUniformBufferImplementation(blockName, buffer);

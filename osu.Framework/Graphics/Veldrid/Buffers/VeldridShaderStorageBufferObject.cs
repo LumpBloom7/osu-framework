@@ -15,7 +15,7 @@ namespace osu.Framework.Graphics.Veldrid.Buffers
     {
         public int Size { get; }
 
-        public bool BoundToEquivalentBuffer { get; set; }
+        public bool BoundViaEquivalentBuffer { get; set; }
         public string BoundBlockName { get; set; } = string.Empty;
 
         private readonly TData[] data;
@@ -78,7 +78,7 @@ namespace osu.Framework.Graphics.Veldrid.Buffers
 
                 // At the time of binding, the data was equivalent to another buffer
                 // Now that the data changed, we need to rebind to ensure future draws don't use the wrong buffer
-                if (BoundToEquivalentBuffer)
+                if (BoundViaEquivalentBuffer)
                     renderer.BindUniformBuffer(BoundBlockName, this);
             }
         }

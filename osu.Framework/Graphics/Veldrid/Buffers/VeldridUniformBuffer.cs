@@ -37,7 +37,7 @@ namespace osu.Framework.Graphics.Veldrid.Buffers
 
         private readonly VeldridRenderer renderer;
 
-        public bool BoundToEquivalentBuffer { get; set; }
+        public bool BoundViaEquivalentBuffer { get; set; }
         public string BoundBlockName { get; set; } = string.Empty;
 
         public VeldridUniformBuffer(VeldridRenderer renderer)

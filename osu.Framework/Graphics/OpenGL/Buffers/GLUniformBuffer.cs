@@ -21,7 +21,7 @@ namespace osu.Framework.Graphics.OpenGL.Buffers
         private int uboId;
 
         public string BoundBlockName { get; set; } = string.Empty;
-        public bool BoundToEquivalentBuffer { get; set; }
+        public bool BoundViaEquivalentBuffer { get; set; }
 
         public GLUniformBuffer(GLRenderer renderer)
         {
@@ -49,7 +49,7 @@ namespace osu.Framework.Graphics.OpenGL.Buffers
 
                 // At the time of binding, the data was equivalent to another buffer
                 // Now that the data changed, we need to rebind to ensure future draws don't use the wrong buffer
-                if (BoundToEquivalentBuffer)
+                if (BoundViaEquivalentBuffer)
                     renderer.BindUniformBuffer(BoundBlockName, this);
             }
         }

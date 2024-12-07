@@ -145,6 +145,8 @@ namespace osu.Framework.Platform.SDL3
 
         public bool CapsLockPressed => SDL_GetModState().HasFlagFast(SDL_Keymod.SDL_KMOD_CAPS);
 
+        public bool KeyboardAttached => SDL_HasKeyboard();
+
         /// <summary>
         /// Represents a handle to this <see cref="SDL3Window"/> instance, used for unmanaged callbacks.
         /// </summary>
@@ -314,7 +316,7 @@ namespace osu.Framework.Platform.SDL3
                 case SDL_EventType.SDL_EVENT_WINDOW_RESIZED:
                     // polling via SDL_PollEvent blocks on resizes (https://stackoverflow.com/a/50858339)
                     if (!updatingWindowStateAndSize)
-                        fetchWindowSize();
+                        fetchWindowSize(storeToConfig: false);
 
                     break;
             }
@@ -501,11 +503,11 @@ namespace osu.Framework.Platform.SDL3
                     break;
 
                 case SDL_EventType.SDL_EVENT_TEXT_EDITING:
-                    HandleTextEditingEvent(e.edit);
+                    handleTextEditingEvent(e.edit);
                     break;
 
                 case SDL_EventType.SDL_EVENT_TEXT_INPUT:
-                    HandleTextInputEvent(e.text);
+                    handleTextInputEvent(e.text);
                     break;
 
                 case SDL_EventType.SDL_EVENT_KEYMAP_CHANGED:

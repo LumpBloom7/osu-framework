@@ -20,6 +20,9 @@ namespace osu.Framework.Graphics.OpenGL.Buffers
         private TData data;
         private int uboId;
 
+        public string BoundBlockName { get; set; } = string.Empty;
+        public bool BoundToEquivalentBuffer { get; set; }
+
         public GLUniformBuffer(GLRenderer renderer)
         {
             Trace.Assert(ThreadSafety.IsDrawThread);
@@ -43,6 +46,11 @@ namespace osu.Framework.Graphics.OpenGL.Buffers
                     return;
 
                 setData(ref value);
+
+                // At the time of binding, the data was equivalent to another buffer
+                // Now that the data changed, we need to rebind to ensure future draws don't use the wrong buffer
+                if (BoundToEquivalentBuffer)
+                    renderer.BindUniformBuffer(BoundBlockName, this);
             }
         }
 

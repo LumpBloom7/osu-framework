@@ -9,6 +9,8 @@ namespace osu.Framework.Graphics.Rendering.Dummy
         where TData : unmanaged, IEquatable<TData>
     {
         public TData Data { get; set; }
+        public bool BoundToEquivalentBuffer { get; set; }
+        public string BoundBlockName { get; set; }= string.Empty;
 
         public void Dispose()
         {

@@ -20,9 +20,16 @@ namespace osu.Framework.Graphics.OpenGL.Buffers
         private readonly TData[] data;
         private readonly uint elementSize;
 
+        public string BoundBlockName { get; set; } = string.Empty;
+        public bool BoundToEquivalentBuffer { get; set; }
+
+        private GLRenderer renderer;
+
         public GLShaderStorageBufferObject(GLRenderer renderer, int uboSize, int ssboSize)
         {
             Trace.Assert(ThreadSafety.IsDrawThread);
+
+            this.renderer = renderer;
 
             Id = GL.GenBuffer();
             Size = renderer.UseStructuredBuffers ? ssboSize : uboSize;
@@ -64,6 +71,11 @@ namespace osu.Framework.Graphics.OpenGL.Buffers
                 }
 
                 changeCount++;
+
+                // At the time of binding, the data was equivalent to another buffer
+                // Now that the data changed, we need to rebind to ensure future draws don't use the wrong buffer
+                if (BoundToEquivalentBuffer)
+                    renderer.BindUniformBuffer(BoundBlockName, this);
             }
         }
 

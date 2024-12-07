@@ -11,6 +11,9 @@ namespace osu.Framework.Graphics.Rendering
     public interface IUniformBuffer : IDisposable, IEquatable<IUniformBuffer>
     {
         bool IEquatable<IUniformBuffer>.Equals(IUniformBuffer? other) => false;
+
+        bool BoundToEquivalentBuffer { get; set; }
+        string BoundBlockName { get; set; }
     }
 
     /// <inheritdoc cref="IUniformBuffer"/>

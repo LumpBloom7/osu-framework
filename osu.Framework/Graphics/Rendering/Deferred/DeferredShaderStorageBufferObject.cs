@@ -22,6 +22,9 @@ namespace osu.Framework.Graphics.Rendering.Deferred
         private readonly DeferredRenderer renderer;
         private readonly int elementSize;
 
+        public bool BoundToEquivalentBuffer { get; set; }
+        public string BoundBlockName { get; set; } = string.Empty;
+
         public DeferredShaderStorageBufferObject(DeferredRenderer renderer, int ssboSize)
         {
             Trace.Assert(ThreadSafety.IsDrawThread);
@@ -46,6 +49,11 @@ namespace osu.Framework.Graphics.Rendering.Deferred
 
                 data[index] = value;
                 renderer.Context.EnqueueEvent(SetShaderStorageBufferObjectDataEvent.Create(renderer, this, index, value));
+
+                // At the time of binding, the data was equivalent to another buffer
+                // Now that the data changed, we need to rebind to ensure future draws don't use the wrong buffer
+                if (BoundToEquivalentBuffer)
+                    renderer.BindUniformBuffer(BoundBlockName, this);
             }
         }
 
